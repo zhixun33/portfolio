@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张勋 | AI-Native PMO & 项目集管理专家</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --nt-red: #E60012;
+            --nt-dark: #1d1d1f;
+            --nt-gray: #86868b;
+            --nt-bg: #fbfbfb;
+            --nt-card-bg: #ffffff;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: var(--nt-bg);
+            color: var(--nt-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .container-wide { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo-wrap { display: flex; align-items: center; gap: 12px; }
+        .logo-badge {
+            width: 36px; height: 36px; background: var(--nt-dark);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 11px; font-weight: 900; letter-spacing: .04em;
+        }
+        .logo-name { font-size: 17px; font-weight: 900; letter-spacing: -.02em; }
+        .nav-links { display: flex; gap: 36px; }
+        .nav-link {
+            font-size: .83rem; font-weight: 700; color: var(--nt-gray);
+            text-decoration: none; padding: 28px 0; position: relative;
+            text-transform: uppercase; letter-spacing: .06em; transition: color .25s;
+        }
+        .nav-link:hover, .nav-link.active { color: var(--nt-red); }
+        .nav-link.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 3px; background: var(--nt-red);
+        }
+        .cta-pill {
+            background: var(--nt-dark); color: #fff;
+            padding: 10px 24px; border-radius: 999px;
+            font-size: 12px; font-weight: 700; letter-spacing: .04em;
+            text-decoration: none; transition: all .25s;
+        }
+        .cta-pill:hover { background: var(--nt-red); }
+
+        /* ── LAYOUT ── */
+        .section-space { padding: 120px 0; position: relative; overflow: hidden; }
+
+        /* ── TYPOGRAPHY ── */
+        .hero-title { font-size: 5.5rem; font-weight: 900; letter-spacing: -.04em; line-height: 1.05; }
+        .section-title {
+            font-size: 3.6rem; font-weight: 900; letter-spacing: -.03em;
+            position: relative; display: inline-block; z-index: 1; margin-bottom: 3rem;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: 14px; left: -8px;
+            width: 72px; height: 14px; background: var(--nt-red);
+            z-index: -1; opacity: .85;
+        }
+        .section-num {
+            font-size: 12rem; font-weight: 900; line-height: 1;
+            color: rgba(29,29,31,.03); position: absolute;
+            top: -60px; left: -30px; z-index: 0; pointer-events: none; user-select: none;
+        }
+        .big-stat { font-size: 5rem; font-weight: 900; line-height: 1; letter-spacing: -.06em; }
+        .text-red { color: var(--nt-red); }
+
+        /* ── CARDS ── */
+        .interactive-card {
+            background: var(--nt-card-bg); border-radius: 24px; padding: 48px;
+            box-shadow: 0 4px 30px rgba(0,0,0,.03);
+            border: 1px solid rgba(0,0,0,.04);
+            transition: all .5s cubic-bezier(.16,1,.3,1);
+            cursor: default; height: 100%;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .interactive-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 24px 64px rgba(0,0,0,.08);
+            border-color: rgba(230,0,18,.25);
+        }
+        .dark-card { background: #2c2c2e; border: none; color: #fff; }
+
+        /* ── TAGS ── */
+        .tag {
+            display: inline-block; padding: 6px 16px; border-radius: 999px;
+            font-size: .82rem; font-weight: 700; letter-spacing: .04em;
+        }
+        .tag-light { background: #f2f2f7; color: var(--nt-dark); }
+        .tag-red { background: rgba(230,0,18,.08); color: var(--nt-red); }
+
+        /* ── CERT STRIP ── */
+        .cert-pill {
+            padding: 22px 36px; background: #fff;
+            border: 1px solid #e5e5ea; border-radius: 18px;
+            transition: all .25s; cursor: default;
+        }
+        .cert-pill:hover {
+            border-color: var(--nt-red);
+            box-shadow: 0 0 0 4px rgba(230,0,18,.07);
+            transform: translateY(-3px);
+        }
+        .cert-name { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; }
+        .cert-pill:hover .cert-name { color: var(--nt-red); }
+        .cert-desc { font-size: 13px; color: var(--nt-gray); margin-top: 4px; }
+
+        /* ── TIMELINE ── */
+        .tl-item { display: grid; grid-template-columns: 180px 1px 1fr; min-height: 100px; }
+        .tl-year { font-size: 12px; font-weight: 700; color: #555; padding: 32px 36px 32px 0; text-align: right; letter-spacing: .04em; }
+        .tl-connector { display: flex; flex-direction: column; align-items: center; }
+        .tl-dot { width: 10px; height: 10px; background: var(--nt-red); border-radius: 50%; margin-top: 36px; flex-shrink: 0; }
+        .tl-line { width: 1px; flex: 1; background: #2a2a2a; }
+        .tl-body { padding: 26px 0 26px 40px; }
+        .tl-company { font-size: 12px; font-weight: 700; color: var(--nt-red); text-transform: uppercase; letter-spacing: .18em; margin-bottom: 6px; }
+        .tl-role { font-size: 26px; font-weight: 900; letter-spacing: -.02em; margin-bottom: 8px; }
+        .tl-desc { font-size: 17px; color: #888; line-height: 1.85; max-width: 640px; }
+
+        /* ── TABLE ── */
+        .table-wrapper { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.03); }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { padding: 22px 28px; background: #f9f9fa; text-align: left; font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid #eaeaea; }
+        .data-table td { padding: 20px 28px; border-bottom: 1px solid #f2f2f7; font-size: 1.05rem; font-weight: 500; }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: #fdfdfd; }
+
+        /* ── STACK GRID ── */
+        .stack-card {
+            background: #fff; border: 1px solid #e8e8ed; border-radius: 18px;
+            padding: 34px 28px; text-align: center;
+            transition: all .25s;
+        }
+        .stack-card:hover {
+            border-color: var(--nt-dark);
+            box-shadow: 4px 4px 0 var(--nt-dark);
+            transform: translate(-2px,-2px);
+        }
+        .stack-name { font-size: 1.35rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: 10px; }
+        .stack-desc { font-size: 14px; color: var(--nt-gray); line-height: 1.65; }
+
+        /* ── VALUE GRID ── */
+        .val-cell { padding: 56px; border: 1px solid #ebebeb; transition: background .2s; }
+        .val-cell:hover { background: #f5f5f7; }
+        .val-num { font-size: 12px; font-weight: 700; color: var(--nt-red); letter-spacing: .2em; font-variant-numeric: tabular-nums; margin-bottom: 20px; }
+        .val-cell h4 { font-size: 1.8rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: 16px; }
+        .val-cell p { font-size: 17px; color: var(--nt-gray); line-height: 1.85; }
+
+        /* ── PROJECT ICONS ── */
+        .proj-icon {
+            width: 80px; height: 80px; background: #f0f0f5;
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 36px; transition: all .3s; flex-shrink: 0;
+        }
+        .proj-icon svg { width: 40px; height: 40px; stroke: var(--nt-dark); stroke-width: 1.25; fill: none; transition: stroke .3s; }
+        .interactive-card:hover .proj-icon { background: var(--nt-red); }
+        .interactive-card:hover .proj-icon svg { stroke: #fff; }
+        .contact-btn {
+            padding: 16px 40px; border-radius: 999px;
+            font-size: 13px; font-weight: 700; letter-spacing: .04em;
+            text-decoration: none; display: inline-block; transition: all .25s;
+        }
+        .btn-dark { background: var(--nt-dark); color: #fff; }
+        .btn-dark:hover { background: var(--nt-red); }
+        .btn-outline { border: 1.5px solid #d0d0d5; color: #888; }
+        .btn-outline:hover { border-color: var(--nt-red); color: var(--nt-red); }
+
+        /* ── ANIM ── */
+        .fade-in-up { animation: fadeInUp .8s cubic-bezier(.23,1,.32,1) forwards; opacity: 0; transform: translateY(40px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .d1 { animation-delay: .1s; } .d2 { animation-delay: .22s; } .d3 { animation-delay: .34s; } .d4 { animation-delay: .46s; }
+
+        /* ── HAMBURGER ── */
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; padding: 8px; border: none; background: none;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 2px;
+            background: var(--nt-dark); border-radius: 2px;
+            transition: all .3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* 移动端抽屉菜单 */
+        .mobile-menu {
+            display: none; position: fixed; top: 65px; left: 0; right: 0;
+            background: rgba(255,255,255,.97); backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+            padding: 20px 24px 28px; z-index: 999;
+            flex-direction: column; gap: 0;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-size: 1rem; font-weight: 700; color: var(--nt-gray);
+            text-decoration: none; padding: 14px 0;
+            border-bottom: 1px solid #f0f0f5;
+            letter-spacing: .04em;
+        }
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu a:hover { color: var(--nt-red); }
+
+        /* ── TABLET (≤1024px) ── */
+        @media(max-width:1024px) {
+            .container-wide { padding: 0 32px; }
+            .hero-title { font-size: 4rem; }
+            .section-title { font-size: 2.8rem; }
+        }
+
+        /* ── MOBILE (≤768px) ── */
+        @media(max-width:768px) {
+
+            /* 全局 */
+            .container-wide { padding: 0 20px; }
+            .section-space { padding: 72px 0; }
+            .section-num { font-size: 6rem; top: -20px; left: -10px; }
+
+            /* 导航 */
+            .nav-links { display: none; }
+            .cta-pill { display: none; }
+            .hamburger { display: flex; }
+
+            /* Hero */
+            #identity { padding-top: 100px; padding-bottom: 60px; }
+            .hero-title { font-size: 2.8rem; letter-spacing: -.03em; line-height: 1.1; }
+            .section-title { font-size: 2.2rem; margin-bottom: 2rem; }
+
+            /* Hero 三栏 → 单列 */
+            .hero-grid-3col {
+                grid-template-columns: 1fr !important;
+                gap: 28px !important;
+                margin-top: 48px !important;
+                padding-top: 36px !important;
+            }
+
+            /* 大数字区 → 2列 */
+            .numbers-4col {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .numbers-4col > div {
+                border-left: 1px solid rgba(255,255,255,.06) !important;
+                padding: 32px 20px !important;
+            }
+            .numbers-4col > div:nth-child(odd) { border-left: none !important; }
+            .big-stat { font-size: 3.6rem; }
+
+            /* 资质证书 → 2列紧凑 */
+            .cert-strip-wrap { gap: 10px !important; }
+            .cert-pill { padding: 16px 20px; border-radius: 14px; flex: 1; min-width: calc(50% - 5px); }
+            .cert-name { font-size: 1.5rem; }
+
+            /* 项目卡 → 单列 */
+            .projects-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .interactive-card { padding: 28px; border-radius: 20px; }
+            .proj-icon { width: 56px; height: 56px; border-radius: 14px; margin-bottom: 22px; }
+            .proj-icon svg { width: 28px; height: 28px; }
+
+            /* 全宽项目卡内部 */
+            .full-card-inner {
+                grid-template-columns: 1fr !important;
+                gap: 28px !important;
+            }
+
+            /* 时间轴 */
+            .tl-item { grid-template-columns: 72px 1px 1fr; }
+            .tl-year { font-size: 11px; padding: 24px 12px 24px 0; line-height: 1.4; }
+            .tl-dot { margin-top: 28px; }
+            .tl-body { padding: 20px 0 20px 20px; }
+            .tl-role { font-size: 18px; }
+            .tl-desc { font-size: 14px; }
+            .tl-company { font-size: 10px; }
+
+            /* AI工具栏 → 2列 */
+            .stack-grid-8 {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .stack-card { padding: 22px 16px; }
+            .stack-name { font-size: 1.05rem; }
+            .stack-desc { font-size: 12px; }
+
+            /* AI能力展示块 */
+            .ai-capability-inner {
+                grid-template-columns: 1fr !important;
+                gap: 28px !important;
+            }
+
+            /* 价值主张 → 单列 */
+            .value-grid-2col {
+                grid-template-columns: 1fr !important;
+            }
+            .val-cell { padding: 32px 24px; border-left: none !important; border-top: none !important; border-bottom: 1px solid #ebebeb !important; }
+            .val-cell:first-child { border-top: 1px solid #ebebeb !important; }
+            .val-cell h4 { font-size: 1.4rem; }
+            .val-cell p { font-size: 15px; }
+
+            /* 管理哲学卡片 → 单列 */
+            .philosophy-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .interactive-card.dark-card { padding: 36px 28px; }
+
+            /* 联系区 */
+            .contact-btns { flex-direction: column; align-items: center; }
+            .contact-btn { width: 100%; max-width: 300px; text-align: center; }
+
+            /* 求职信息表格 */
+            .data-table th, .data-table td { padding: 14px 16px; font-size: .9rem; }
+            /* 表格在超窄屏改为块状显示 */
+            .data-table thead { display: none; }
+            .data-table td { display: block; padding: 10px 16px; border-bottom: none; }
+            .data-table td:first-child {
+                padding-top: 16px; font-weight: 800; color: var(--nt-red);
+                font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+            }
+            .data-table td:last-child { padding-bottom: 16px; border-bottom: 1px solid #f2f2f7; }
+            .data-table tr:last-child td:last-child { border-bottom: none; }
+
+            /* 教育区 */
+            .edu-title { font-size: 1.6rem !important; }
+
+            /* Footer */
+            .footer-title { font-size: 2.6rem !important; }
+
+            /* 项目卡内标题字号 */
+            .interactive-card h4 { font-size: 1.4rem !important; }
+            .interactive-card p { font-size: 14px !important; }
+
+            /* 卡片禁用 hover 位移（手机不需要） */
+            .interactive-card:hover { transform: none; }
+            .stack-card:hover { transform: none; box-shadow: none; }
+            .cert-pill:hover { transform: none; }
+        }
+
+        /* ── 超小屏 (≤375px) ── */
+        @media(max-width:375px) {
+            .hero-title { font-size: 2.3rem; }
+            .section-title { font-size: 1.9rem; }
+            .cert-pill { min-width: 100%; }
+            .big-stat { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<header>
+    <div class="container-wide nav-inner" style="padding-top:0;padding-bottom:0;">
+        <div class="logo-wrap">
+            <div class="logo-badge">Z·X</div>
+            <span class="logo-name">ZHANG XUN</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#identity" class="nav-link">核心定位</a>
+            <a href="#credentials" class="nav-link">专业资质</a>
+            <a href="#projects" class="nav-link">项目案例</a>
+            <a href="#career" class="nav-link">职业轨迹</a>
+            <a href="#stack" class="nav-link">AI工具链</a>
+            <a href="#value" class="nav-link">核心价值</a>
+        </nav>
+        <a href="#contact" class="cta-pill">洽谈合作 →</a>
+        <button class="hamburger" id="hamburger" aria-label="菜单">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- 移动端菜单 -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#identity" onclick="closeMobileMenu()">核心定位</a>
+    <a href="#credentials" onclick="closeMobileMenu()">专业资质</a>
+    <a href="#projects" onclick="closeMobileMenu()">项目案例</a>
+    <a href="#career" onclick="closeMobileMenu()">职业轨迹</a>
+    <a href="#stack" onclick="closeMobileMenu()">AI 工具链</a>
+    <a href="#value" onclick="closeMobileMenu()">核心价值</a>
+    <a href="#contact" onclick="closeMobileMenu()" style="color:var(--nt-red);font-weight:900;">洽谈合作 →</a>
+</div>
+
+
+<!-- ═══ 01 HERO ═══ -->
+<section id="identity" class="section-space" style="padding-top:160px;">
+    <div class="container-wide">
+        <div class="section-num">01</div>
+        <div class="mb-8 fade-in-up">
+            <span class="tag tag-red" style="font-size:.78rem;letter-spacing:.18em;padding:7px 18px;">AI-NATIVE PMO EXPERT · PgMP CERTIFIED · 13年经验</span>
+        </div>
+
+        <h1 class="hero-title fade-in-up d1">
+            用 AI 重新定义<br><span class="text-red">项目管理效能</span>
+        </h1>
+
+        <p class="fade-in-up d2" style="font-size:1.25rem;color:var(--nt-gray);max-width:680px;margin-top:28px;line-height:1.75;font-weight:400;">
+            PgMP 认证项目集管理专家，13 年实战经验，主导过千万级全球化软件项目集；<br>
+            深度融合 AI Agent 技术，将 PMO 从执行层推向智能决策层。
+        </p>
+
+        <!-- 三栏 -->
+        <div class="fade-in-up d3 hero-grid-3col" style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:80px;padding-top:52px;border-top:1px solid #e5e5ea;">
+            <div>
+                <h3 style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.18em;margin-bottom:14px;">核心定位</h3>
+                <p style="font-size:1.05rem;font-weight:700;line-height:1.65;">AI-Native PMO 领导者，覆盖互联网、汽车、快消、奢侈品、智慧园区、航空及政府机构，全行业交付背景。</p>
+            </div>
+            <div>
+                <h3 style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.18em;margin-bottom:14px;">AI 实战</h3>
+                <p style="font-size:1.05rem;font-weight:700;line-height:1.65;">基于 Dify / Coze 构建 PMO 数字分身，落地 RAG 知识库架构与浏览器自动化，探索"龙虾军团"崛起后的交付新范式。</p>
+            </div>
+            <div>
+                <h3 style="font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.18em;margin-bottom:14px;">规模战绩</h3>
+                <p style="font-size:1.05rem;font-weight:700;line-height:1.65;">单项目集规模突破 15,000 人天，统筹 150 人跨国团队，整合 20+ 遗留系统，按期交付全球化智能客服平台。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ BIG NUMBERS ═══ -->
+<section style="padding:100px 0;background:var(--nt-dark);color:#fff;">
+    <div class="container-wide">
+        <div class="numbers-4col" style="display:grid;grid-template-columns:repeat(4,1fr);">
+            <div style="padding:44px;border-left:1px solid rgba(255,255,255,.06);" class="num-block">
+                <div class="big-stat">13<span class="text-red">+</span></div>
+                <div style="font-size:15px;color:#666;margin-top:12px;line-height:1.5;">年项目管理<br>实战经验</div>
+            </div>
+            <div style="padding:44px;border-left:1px solid rgba(255,255,255,.06);" class="num-block">
+                <div class="big-stat">1.5<span class="text-red">W</span></div>
+                <div style="font-size:15px;color:#666;margin-top:12px;line-height:1.5;">单项目最大<br>人天规模</div>
+            </div>
+            <div style="padding:44px;border-left:1px solid rgba(255,255,255,.06);" class="num-block">
+                <div class="big-stat">13<span class="text-red">k+</span></div>
+                <div style="font-size:15px;color:#666;margin-top:12px;line-height:1.5;">AI 智库<br>知识文档量</div>
+            </div>
+            <div style="padding:44px;border-left:1px solid rgba(255,255,255,.06);" class="num-block">
+                <div class="big-stat">5<span class="text-red">+</span></div>
+                <div style="font-size:15px;color:#666;margin-top:12px;line-height:1.5;">国际权威<br>专业认证</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 02 CREDENTIALS ═══ -->
+<section id="credentials" class="section-space" style="background:#f5f5f7;">
+    <div class="container-wide">
+        <div class="section-num">02</div>
+        <h2 class="section-title">专业资质</h2>
+        <p style="font-size:1.1rem;color:var(--nt-gray);max-width:560px;margin-bottom:60px;margin-top:-16px;">五项国际与国家级权威认证，构成全栈式项目管理能力背书。</p>
+        <div class="cert-strip-wrap" style="display:flex;flex-wrap:wrap;gap:16px;">
+            <div class="cert-pill">
+                <div class="cert-name">PgMP</div>
+                <div class="cert-desc">项目集管理专业人士 · PMI</div>
+            </div>
+            <div class="cert-pill">
+                <div class="cert-name">PMP</div>
+                <div class="cert-desc">项目管理专业人士 · PMI</div>
+            </div>
+            <div class="cert-pill">
+                <div class="cert-name">NPDP</div>
+                <div class="cert-desc">产品经理国际认证 · PDMA</div>
+            </div>
+            <div class="cert-pill">
+                <div class="cert-name">ITIL</div>
+                <div class="cert-desc">IT 服务管理基础认证 · Axelos</div>
+            </div>
+            <div class="cert-pill">
+                <div class="cert-name">高级信管师</div>
+                <div class="cert-desc">信息系统项目管理师 · 工信部</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 03 PROJECTS ═══ -->
+<section id="projects" class="section-space">
+    <div class="container-wide">
+        <div class="section-num">03</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px;gap:40px;flex-wrap:wrap;">
+            <div>
+                <h2 class="section-title" style="margin-bottom:0;">项目案例</h2>
+            </div>
+            <p style="font-size:1rem;color:var(--nt-gray);max-width:380px;line-height:1.75;">在复杂系统中寻找确定性，通过 Agent 自动化实现组织级的效能跃迁。</p>
+        </div>
+
+        <div class="projects-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+            <!-- P1 -->
+            <div class="interactive-card">
+                <div>
+                    <div class="proj-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 2.5-4 5.5-4 9s1.5 6.5 4 9"/><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M4.5 7.5h15M4.5 16.5h15"/></svg></div>
+                    <div style="font-size:12px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;">2023.12 — 2024.12 · 项目集经理</div>
+                    <h4 style="font-size:1.75rem;font-weight:900;letter-spacing:-.03em;margin-bottom:14px;line-height:1.15;">全球一体化智能客服平台（GCCP）</h4>
+                    <p style="font-size:16px;color:var(--nt-gray);line-height:1.85;margin-bottom:28px;">负责某头部互联网集团千万级私有化项目集，目标建设 Global Customer Care Platform，整合 20+ 遗留系统，形成客户—会话—工单—知识—运营统一模型，实现中国区先行上线、全球复制蓝图。统筹资源与预算（千万级、≈15,000 人天），组织 90 人常驻团队，峰值协同达 150 人。</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <span class="tag tag-light">千万级预算</span>
+                    <span class="tag tag-light">1.5W 人天</span>
+                    <span class="tag tag-light">150 人跨团队</span>
+                    <span class="tag tag-light">20+ 系统整合</span>
+                    <span class="tag tag-red">中国区按期上线</span>
+                </div>
+            </div>
+
+            <!-- P2 -->
+            <div class="interactive-card">
+                <div>
+                    <div class="proj-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="12" cy="14" r="3"/><line x1="12" y1="7" x2="12" y2="11"/><line x1="7" y1="18" x2="10" y2="15.5"/><line x1="17" y1="18" x2="14" y2="15.5"/></svg></div>
+                    <div style="font-size:12px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;">2025.03 — 2025.12 · PMO</div>
+                    <h4 style="font-size:1.75rem;font-weight:900;letter-spacing:-.03em;margin-bottom:14px;line-height:1.15;">某国企 AI Agent 知识智库项目</h4>
+                    <p style="font-size:16px;color:var(--nt-gray);line-height:1.85;margin-bottom:28px;">通过引入大模型与 AI Agent 能力，对 13,000+ 文档进行智能化重构，构建 RAG 检索增强架构，实现智能知识检索赋能员工、智能客服快速精准响应两大核心场景。总结形成 AI Agent 项目交付经验并在多个项目成功复制推广。</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <span class="tag tag-red">RAG 架构</span>
+                    <span class="tag tag-red">AI Agent</span>
+                    <span class="tag tag-red">13k+ 文档</span>
+                    <span class="tag tag-light">可复制交付 SOP</span>
+                </div>
+            </div>
+
+            <!-- P3 -->
+            <div class="interactive-card">
+                <div>
+                    <div class="proj-icon"><svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
+                    <div style="font-size:12px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;">2024.07 — 至今 · 项目经理</div>
+                    <h4 style="font-size:1.75rem;font-weight:900;letter-spacing:-.03em;margin-bottom:14px;line-height:1.15;">某大型商超智能客服持续演进项目</h4>
+                    <p style="font-size:16px;color:var(--nt-gray);line-height:1.85;margin-bottom:28px;">针对老客户过早私有化部署版本的智能化改造，分三期（三/四/五期）持续推进大模型与 AI Agent 引入、机器人知识库智能升级、工单培训等模块改造。挽救合作关系并带来额外 500 万营收；沉淀"无项目管理系统仅用在线文档管理"的轻量化方法论并在组织内推广。</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <span class="tag tag-light">大模型引入</span>
+                    <span class="tag tag-light">多期持续交付</span>
+                    <span class="tag tag-red">+500万营收</span>
+                    <span class="tag tag-red">轻量化方法论</span>
+                </div>
+            </div>
+
+            <!-- P4 -->
+            <div class="interactive-card">
+                <div>
+                    <div class="proj-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><rect x="3" y="18" width="6" height="4" rx="1"/><rect x="9" y="8" width="6" height="14" rx="1"/><rect x="15" y="12" width="6" height="10" rx="1"/></svg></div>
+                    <div style="font-size:12px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;">2020.07 — 2021.12 · 项目总监 & 业务专家</div>
+                    <h4 style="font-size:1.75rem;font-weight:900;letter-spacing:-.03em;margin-bottom:14px;line-height:1.15;">某新能源品牌数字化数据中台</h4>
+                    <p style="font-size:16px;color:var(--nt-gray);line-height:1.85;margin-bottom:28px;">主导某新能源车企数字化营销数据中台建设，打通售后、工厂、APP 及用户行为埋点等系统，构建 OneID 用户为核心的全生命周期运营平台，赋能自助 BI 交互分析。项目被评为优秀项目，并连续赢得二期、三期合同，培养出 2 名项目经理与 2 名业务顾问。</p>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <span class="tag tag-light">数据中台</span>
+                    <span class="tag tag-light">OneID 体系</span>
+                    <span class="tag tag-light">自助 BI</span>
+                    <span class="tag tag-red">客户优秀项目</span>
+                    <span class="tag tag-red">连续三期合同</span>
+                </div>
+            </div>
+
+            <!-- P5 FULL WIDTH -->
+            <div class="interactive-card" style="grid-column:1/-1;">
+                <div class="full-card-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;">
+                    <div>
+                        <div class="proj-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polyline points="7 10 10 7 13 10 17 6"/></svg></div>
+                        <div style="font-size:12px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;">2019.08 — 2019.11 · 项目经理</div>
+                        <h4 style="font-size:1.75rem;font-weight:900;letter-spacing:-.03em;margin-bottom:14px;line-height:1.15;">某合资品牌 MOD 高管可视化决策大屏</h4>
+                        <p style="font-size:16px;color:var(--nt-gray);line-height:1.85;margin-bottom:28px;">为某合资主机厂最高管理层执委会打造可视化管理大屏，涵盖主机厂销售全域业务，客户内部评估需 4 个月，项目团队顶住压力用 1.5 个月完成交付，获客户 IT 总监在供应商大会上公开表扬，评为客户优秀项目。</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                            <span class="tag tag-light">高层执委会专项</span>
+                            <span class="tag tag-light">1.5个月极速交付</span>
+                            <span class="tag tag-red">客户优秀项目</span>
+                            <span class="tag tag-red">供应商大会表彰</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="background:#f5f5f7;border-radius:20px;padding:36px;">
+                            <p style="font-size:11px;font-weight:700;color:var(--nt-dark);letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px;">其他代表性交付</p>
+                            <div style="display:flex;flex-direction:column;gap:16px;font-size:15px;color:var(--nt-gray);line-height:1.85;">
+                                <div style="padding-bottom:14px;border-bottom:1px solid #e8e8ed;display:flex;gap:14px;align-items:flex-start;">
+                                    <div style="width:36px;height:36px;background:#fff;border:1px solid #e5e5ea;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.75"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+                                    <div><strong style="color:var(--nt-dark);">某保健酒品牌</strong> 用户价值分析及应用咨询项目<br>
+                                    <span style="font-size:14px;">全生命周期用户分层、高价值人群挖掘，首个大型用户洞察咨询项目，沉淀行业方法论</span></div>
+                                </div>
+                                <div style="padding-bottom:14px;border-bottom:1px solid #e8e8ed;display:flex;gap:14px;align-items:flex-start;">
+                                    <div style="width:36px;height:36px;background:#fff;border:1px solid #e5e5ea;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.75"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                                    <div><strong style="color:var(--nt-dark);">某重点商超客户</strong> 合作危机处置<br>
+                                    <span style="font-size:14px;">解决客户替换系统危机，避免流失并带来 500 万营收</span></div>
+                                </div>
+                                <div style="display:flex;gap:14px;align-items:flex-start;">
+                                    <div style="width:36px;height:36px;background:#fff;border:1px solid #e5e5ea;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.75"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+                                    <div><strong style="color:var(--nt-dark);">上海飞机制造</strong> 外协项目管理（C919 / C929 / ARJ21）<br>
+                                    <span style="font-size:14px;">负责招投标、供应商确认、程序跟踪及合格验收，对接国家审计署审查工作</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 04 CAREER ═══ -->
+<section id="career" class="section-space" style="background:var(--nt-dark);color:#fff;">
+    <div class="container-wide">
+        <div class="section-num" style="color:rgba(255,255,255,.025);">04</div>
+        <h2 class="section-title text-white" style="color:#fff;">职业轨迹</h2>
+        <p style="color:#666;font-size:1.05rem;max-width:560px;margin-bottom:64px;margin-top:-16px;">从航空工程师到 AI-Native PMO，横跨制造、互联网与数字化转型的复合职业路径。</p>
+
+        <div class="timeline">
+
+            <div class="tl-item">
+                <div class="tl-year">2023.12<br>— 至今</div>
+                <div class="tl-connector"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-body">
+                    <div class="tl-company">头部互联网集团 · 智能客服赛道</div>
+                    <div class="tl-role">资深项目经理 / 项目集经理 · PMO 负责人</div>
+                    <div class="tl-desc">主导千万级全球化客服平台项目集交付；组建 PMO，搭建交付体系；落地 AI Agent 智库项目并推广复制 SOP；挽救重点商超客户合作并带来 500 万营收。</div>
+                </div>
+            </div>
+
+            <div class="tl-item">
+                <div class="tl-year">2022.08<br>— 2023.12</div>
+                <div class="tl-connector"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-body">
+                    <div class="tl-company">智能营销科技公司</div>
+                    <div class="tl-role">资深项目经理 & 客户经理</div>
+                    <div class="tl-desc">负责大型新型项目管理，指导与带教项目经理团队；同时担任客户经理，配合销售赢得新客户，挖掘存量商机，统筹项目集管控。完成首个大型用户洞察咨询项目，沉淀行业实施方法论。</div>
+                </div>
+            </div>
+
+            <div class="tl-item">
+                <div class="tl-year">2019.07<br>— 2022.08</div>
+                <div class="tl-connector"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-body">
+                    <div class="tl-company">BI 数据智能公司</div>
+                    <div class="tl-role">BI 事业线负责人 / 项目负责人</div>
+                    <div class="tl-desc">规划 DDS 数据决策系统解决方案，带领团队完成多家车企（含某新能源品牌、合资品牌）BI 与数据中台项目交付，事业线营收与利润率均达成目标，培养 2 名项目经理与 2 名业务顾问。</div>
+                </div>
+            </div>
+
+            <div class="tl-item">
+                <div class="tl-year">2018.09<br>— 2019.07</div>
+                <div class="tl-connector"><div class="tl-dot"></div><div class="tl-line"></div></div>
+                <div class="tl-body">
+                    <div class="tl-company">智慧园区 IT 服务公司</div>
+                    <div class="tl-role">项目经理</div>
+                    <div class="tl-desc">负责公共服务平台及智慧园区项目的售前支持、需求分析、立项与全程管理，获公司年度"明日之星"荣誉。</div>
+                </div>
+            </div>
+
+            <div class="tl-item">
+                <div class="tl-year">2013.08<br>— 2018.09</div>
+                <div class="tl-connector"><div class="tl-dot"></div><div class="tl-line" style="background:transparent;"></div></div>
+                <div class="tl-body">
+                    <div class="tl-company">上海飞机制造有限公司</div>
+                    <div class="tl-role">机械工程师 → 项目经理</div>
+                    <div class="tl-desc">从数控加工工程师转型为外协项目经理，负责 C919 / C929 / ARJ21 型号外协项目招投标、供应商管理及验收；兼职部门审计员，对接国家审计署对中国商飞的经济责任审查工作。</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 教育 -->
+        <div style="margin-top:80px;padding-top:56px;border-top:1px solid rgba(255,255,255,.06);">
+            <div style="font-size:10px;font-weight:700;color:var(--nt-red);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px;">Education</div>
+            <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;">
+                <span class="edu-title" style="font-size:2.2rem;font-weight:900;letter-spacing:-.03em;">北京航空航天大学</span>
+                <span style="color:#666;font-size:1rem;">本科 · 飞行器制造工程 · 2009 — 2013</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 05 AI STACK ═══ -->
+<section id="stack" class="section-space" style="background:#f5f5f7;">
+    <div class="container-wide">
+        <div class="section-num">05</div>
+        <h2 class="section-title">AI 工具链</h2>
+        <p style="font-size:1.05rem;color:var(--nt-gray);max-width:560px;margin-bottom:64px;margin-top:-16px;">不止会使用 AI，而是将 AI 深度嵌入 PMO 日常运营，实现效能的结构性跃升。</p>
+
+        <div class="stack-grid-8" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+            <div class="stack-card">
+                <div class="stack-name">Dify / Coze</div>
+                <div class="stack-desc">PMO 数字分身构建<br>多 Agent 工作流编排</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">RAG / LLM</div>
+                <div class="stack-desc">海量知识库治理<br>智能检索增强生成</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">OpenClaw</div>
+                <div class="stack-desc">浏览器自动化执行<br>数据采集与任务触发</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">Cursor / v0</div>
+                <div class="stack-desc">看板与原型快速开发<br>低代码可视化交付</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">Claude / GPT</div>
+                <div class="stack-desc">决策辅助与方案生成<br>文档自动化起草</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">飞书 / Jira</div>
+                <div class="stack-desc">敏捷看板协同<br>跨团队进度同步</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">Notion AI</div>
+                <div class="stack-desc">项目文档智能管理<br>知识沉淀自动化</div>
+            </div>
+            <div class="stack-card">
+                <div class="stack-name">Python / API</div>
+                <div class="stack-desc">自动化脚本开发<br>系统集成与数据管道</div>
+            </div>
+        </div>
+
+        <!-- AI 能力展示 -->
+        <div style="background:#fff;border-radius:24px;padding:56px;border:1px solid #e8e8ed;">
+            <div class="ai-capability-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;">
+                <div>
+                    <div style="font-size:10px;font-weight:700;color:var(--nt-red);letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;">PMO 数字分身能力模块</div>
+                    <h3 style="font-size:2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:24px;line-height:1.2;">将 PMO 从执行层<br>推向智能决策层</h3>
+                    <p style="font-size:16px;color:var(--nt-gray);line-height:1.9;">基于 Dify / Coze 平台，结合 RAG 知识库与浏览器自动化，构建 PMO 智能体工作流。项目日报、风险预警、资源看板实现自动化，决策辅助实时响应，大幅降低重复性人力投入。</p>
+                </div>
+                <div style="background:#f5f5f7;border-radius:16px;padding:32px;">
+                    <div style="display:flex;flex-direction:column;gap:14px;font-size:15px;color:var(--nt-gray);line-height:1.75;">
+                        <div style="display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> 自动生成项目日报 / 周报 / 月报</div>
+                        <div style="border-top:1px solid #e5e5ea;padding-top:14px;display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> 风险节点智能预警与即时推送</div>
+                        <div style="border-top:1px solid #e5e5ea;padding-top:14px;display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> 资源负荷看板实时动态更新</div>
+                        <div style="border-top:1px solid #e5e5ea;padding-top:14px;display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> 浏览器自动化信息采集与录入</div>
+                        <div style="border-top:1px solid #e5e5ea;padding-top:14px;display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> 知识库问答与项目决策辅助</div>
+                        <div style="border-top:1px solid #e5e5ea;padding-top:14px;display:flex;align-items:center;gap:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.75"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> 文档自动分类、标签化与归档</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 06 VALUE ═══ -->
+<section id="value" class="section-space">
+    <div class="container-wide">
+        <div class="section-num">06</div>
+        <h2 class="section-title">为何选择我</h2>
+        <p style="font-size:1.05rem;color:var(--nt-gray);max-width:560px;margin-bottom:0;margin-top:-16px;">四个差异化竞争优势，构成不可替代的复合型 PMO 价值。</p>
+        <div class="value-grid-2col" style="display:grid;grid-template-columns:1fr 1fr;margin-top:56px;">
+            <div class="val-cell">
+                <div class="val-num">01</div>
+                <h4>项目集思维，不止项目管理</h4>
+                <p>PgMP 认证的核心是战略对齐与效益治理。管理项目组合间的依赖、风险与资源，而非只盯单一项目交付，让每个项目都服务于组织战略目标。</p>
+            </div>
+            <div class="val-cell" style="border-left:none;">
+                <div class="val-num">02</div>
+                <h4>AI 原生，而非 AI 追随者</h4>
+                <p>将 AI Agent、RAG、自动化工作流直接嵌入 PMO 日常运转，探索"龙虾军团"崛起后的交付新范式。我的 AI 实践已在生产环境验证并可复制推广。</p>
+            </div>
+            <div class="val-cell" style="border-top:none;">
+                <div class="val-num">03</div>
+                <h4>跨行业全场景覆盖能力</h4>
+                <p>互联网、新能源车企、快消、奢侈品、智慧园区、航空工业与政府机构的跨赛道经历，带来跨组织文化管理能力与多监管框架下的交付经验。</p>
+            </div>
+            <div class="val-cell" style="border-top:none;border-left:none;">
+                <div class="val-num">04</div>
+                <h4>售前 + 交付 + 客户的全链路视角</h4>
+                <p>同时具备项目经理与客户经理双重角色经验，能从商机挖掘、合同签署、项目交付到持续运营，全程为客户和组织创造价值闭环。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ 管理思考 ═══ -->
+<section class="section-space" style="background:var(--nt-dark);color:#fff;">
+    <div class="container-wide">
+        <h2 class="section-title" style="color:#fff;">项目管理哲学</h2>
+        <p style="color:#555;font-size:1.05rem;max-width:560px;margin-bottom:64px;margin-top:-16px;">在不确定性中寻找确定性——这是交付管理的本质命题。</p>
+        <div class="philosophy-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div class="interactive-card dark-card" style="background:#2c2c2e;border:none;color:#fff;padding:52px;">
+                <div>
+                    <h3 style="color:var(--nt-red);font-size:2.5rem;font-weight:900;letter-spacing:-.04em;font-style:italic;margin-bottom:20px;">墨菲定律</h3>
+                    <p style="color:#666;font-size:1.4rem;font-weight:300;font-style:italic;line-height:1.5;margin-bottom:24px;">"任何可能出错的事情，最终都会出错。"</p>
+                    <p style="color:#aaa;font-size:15px;line-height:1.85;">交付管理的本质是对<span style="color:#fff;font-weight:700;">不确定性</span>的持续抗争。墨菲定律不惩罚运气差，它只<span style="color:var(--nt-red);font-weight:700;">惩罚侥幸心理</span>。前置风险识别、预案设计与关键节点检查，是对抗墨菲定律的唯一解法。</p>
+                </div>
+            </div>
+            <div class="interactive-card dark-card" style="background:#2c2c2e;border:none;color:#fff;padding:52px;">
+                <div>
+                    <h3 style="color:var(--nt-red);font-size:2.5rem;font-weight:900;letter-spacing:-.04em;font-style:italic;margin-bottom:20px;">质量成本观</h3>
+                    <p style="color:#fff;font-size:1.1rem;font-weight:700;margin-bottom:24px;">预防成本永远低于失败成本。</p>
+                    <div style="display:flex;flex-direction:column;gap:14px;font-size:14px;color:#888;">
+                        <div style="display:flex;justify-content:space-between;border-bottom:1px solid #333;padding-bottom:12px;">
+                            <span>预防投入（规范 + 评审 + 培训）</span>
+                            <span style="font-weight:700;color:#fff;">低成本</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;border-bottom:1px solid #333;padding-bottom:12px;">
+                            <span>内部失败（返工 + 延期）</span>
+                            <span style="font-weight:700;color:#fff;">5–10倍</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <span>外部失败（客户投诉 + 信任流失）</span>
+                            <span style="font-weight:700;color:var(--nt-red);">无法估量</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:24px;padding:16px 20px;background:rgba(230,0,18,.12);border:1px solid rgba(230,0,18,.3);border-radius:12px;">
+                        <p style="font-size:12px;color:var(--nt-red);font-weight:700;margin-bottom:4px;letter-spacing:.12em;text-transform:uppercase;">Core Belief</p>
+                        <p style="font-size:14px;color:#fff;font-weight:700;">质量是设计出来的，不是测试出来的。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="section-space" style="text-align:center;">
+    <div class="container-wide">
+        <div style="font-size:10px;font-weight:700;color:var(--nt-red);letter-spacing:.22em;text-transform:uppercase;margin-bottom:32px;">Get In Touch</div>
+        <h2 class="hero-title" style="font-size:5rem;margin-bottom:20px;">
+            期待一次<span class="text-red">有深度的对话</span>
+        </h2>
+        <p style="font-size:1.15rem;color:var(--nt-gray);max-width:560px;margin:0 auto 56px;line-height:1.75;">
+            求职意向：<strong style="color:var(--nt-dark);">PMO 负责人 / AI 项目经理 / 项目集经理</strong><br>
+            期望城市：上海 | 可接受远程协同
+        </p>
+        <div class="contact-btns" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:64px;">
+            <a href="/cdn-cgi/l/email-protection#e8dcd8dadcdcd9dfdedda89999c68b8785" class="contact-btn btn-dark">发送邮件</a>
+            <a href="tel:18321862018" class="contact-btn btn-outline">18321862018</a>
+        </div>
+
+        <!-- 求职信息摘要 -->
+        <div class="table-wrapper" style="text-align:left;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>维度</th>
+                        <th>详情</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight:700;color:var(--nt-dark);">求职意向</td>
+                        <td>PMO 负责人 / AI 项目经理 / 项目集经理 / 数字化转型项目总监</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:700;color:var(--nt-dark);">工作经验</td>
+                        <td>13 年 | 含 PgMP 认证项目集管理 + AI Agent 落地实战经验</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:700;color:var(--nt-dark);">行业背景</td>
+                        <td>互联网 · 新能源汽车 · 快消 · 奢侈品 · 智慧园区 · 航空工业 · 政府机构</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:700;color:var(--nt-dark);">核心认证</td>
+                        <td>PgMP · PMP · NPDP · ITIL · 高级信息系统项目管理师</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:700;color:var(--nt-dark);">期望城市</td>
+                        <td>上海（优先） | 可接受出差 | 开放远程协同洽谈</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="section-space" style="background:#fff;border-top:1px solid #f0f0f5;text-align:center;padding:80px 0;">
+    <div class="container-wide">
+        <h2 class="hero-title footer-title" style="font-size:4.5rem;color:var(--nt-dark);margin-bottom:20px;">
+            不确定的时代<br><span class="text-red">做确定的交付</span>
+        </h2>
+        <p style="font-size:1rem;color:#ccc;margin-top:48px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;">
+            Zhang Xun · AI-Native PMO Portfolio · 2026
+        </p>
+    </div>
+</footer>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    lucide.createIcons();
+
+    // ── 汉堡菜单 ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+    });
+    function closeMobileMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+    }
+    // 点击菜单外关闭
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+
+    // ── Scroll reveal ──
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.interactive-card, .cert-pill, .stack-card, .val-cell, .tl-item, .num-block').forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(28px)';
+        el.style.transition = `opacity .7s ease ${i % 4 * 80}ms, transform .7s ease ${i % 4 * 80}ms`;
+        io.observe(el);
+    });
+
+    // ── Nav highlight ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let cur = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 140) cur = s.id;
+        });
+        navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+        });
+    });
+
+    // ── Numbers count-up ──
+    function countUp(el, target, suffix, decimals = 0) {
+        let start = 0;
+        const step = target / 60;
+        const timer = setInterval(() => {
+            start = Math.min(start + step, target);
+            el.textContent = decimals ? start.toFixed(1) : Math.floor(start);
+            if (start >= target) { el.textContent = decimals ? target.toFixed(1) : target; clearInterval(timer); }
+        }, 16);
+    }
+
+    const numSection = document.querySelector('#identity + section');
+    const numObserver = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) {
+            const stats = numSection.querySelectorAll('.big-stat');
+            countUp(stats[0].childNodes[0], 13, '+');
+            countUp(stats[1
